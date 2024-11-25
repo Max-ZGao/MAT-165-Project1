@@ -8,18 +8,19 @@ class Surface:
 
         a, b = points.shape
         
-        #assert(a <= b, "A surface needs <=n points of n dimension")
-        #assert(a <= 2, "Only dimension 2 is implemented currently")
+        #assert(b <= a, "A surface needs <=n points of n dimension")
+        #assert(b <= 2, "Only dimension 2 is implemented currently")
         
-        self.dimension = a
+        self.num_points = a
+        self.dimention = b
         self.points = points
 
 
     def is_intersecting(self, surface):
-        for i in range(self.dimension):
-            for j in range(surface.dimension):
-                if do_intersect(self.points[i], self.points[(i + 1) % self.dimension],
-                                surface.points[j], surface.points[(j + 1) % surface.dimension]):
+        for i in range(self.num_points):
+            for j in range(surface.num_points):
+                if do_intersect(self.points[i], self.points[(i + 1) % self.num_points],
+                                surface.points[j], surface.points[(j + 1) % surface.num_points]):
                     return True
         return False
 

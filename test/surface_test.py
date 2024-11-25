@@ -1,5 +1,8 @@
 import unittest
 import numpy as np
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 from Surface import Surface
 
 class TestSurface(unittest.TestCase):
@@ -32,21 +35,12 @@ class TestSurface(unittest.TestCase):
         surface2 = Surface(points2)
         self.assertTrue(surface1.is_intersecting(surface2))
 
-    def test_shared_endpoint_no_intersection(self):
-        points1 = np.array([[0, 0], [1, 1]])
-        points2 = np.array([[1, 1], [2, 2]])
-        surface1 = Surface(points1)
-        surface2 = Surface(points2)
-        self.assertFalse(surface1.is_intersecting(surface2))
-
     def test_shared_endpoint_intersection(self):
         points1 = np.array([[0, 0], [1, 1]])
         points2 = np.array([[1, 1], [0, 2]])
         surface1 = Surface(points1)
         surface2 = Surface(points2)
         self.assertTrue(surface1.is_intersecting(surface2))
-
-    # New Tests
 
     def test_single_point_no_intersection(self):
         points1 = np.array([[0, 0]])

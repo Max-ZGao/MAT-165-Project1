@@ -19,6 +19,7 @@ class Surface:
     def is_intersecting(self, surface):
         for i in range(self.num_points):
             for j in range(surface.num_points):
+                # add module to prevent index out of range
                 if do_intersect(self.points[i], self.points[(i + 1) % self.num_points],
                                 surface.points[j], surface.points[(j + 1) % surface.num_points]):
                     return True
@@ -38,7 +39,7 @@ def on_segment(p, q, r):
         return True
     return False
 
-# check if two line intersect.
+# check if two line segment intersect.
 def do_intersect(point1_start, point1_end, point2_start, point2_end):
     o1 = orientation(point1_start, point1_end, point2_start)
     o2 = orientation(point1_start, point1_end, point2_end)

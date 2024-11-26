@@ -1,4 +1,5 @@
 from PartitionGenerator import PartitionGenerator
+from CrossingFreePartition import CrossingFreePartition
 from Graph import UndirectedGraph
 import numpy as np
 
@@ -18,17 +19,13 @@ while True:
 
     if part == None:
         break
-
-    
+  
     partitions.append(part)
 
+CFPartitions = CrossingFreePartition(partitions) # check which ones are crossing free
 
 
-graph = UndirectedGraph(partitions)
 
-for part1 in partitions:
-    for part2 in partitions:
-        if part1.is_distance_1_from(part2):
-            graph.connect(part1, part2)
+matrix = UndirectedGraph(CFPartitions)
 
-
+print(matrix)

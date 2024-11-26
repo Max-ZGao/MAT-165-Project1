@@ -1,5 +1,6 @@
 from PartitionGenerator import PartitionGenerator
-from Graph import UndirectedGraph
+from CrossingFreePartition import CrossingFreePartition
+from Graph import GenerateMatrix
 import numpy as np
 
 
@@ -18,17 +19,13 @@ while True:
 
     if part == None:
         break
-
-    
+  
     partitions.append(part)
 
+CFPartitions = CrossingFreePartition(partitions) # check which ones are crossing free
 
-
-graph = UndirectedGraph(partitions)
-
-for part1 in partitions:
-    for part2 in partitions:
-        if part1.is_distance_1_from(part2):
-            graph.connect(part1, part2)
-
-
+# output of the program. CFPartitions should be a list of lists of sets, such as [[{(1,1), (2,2)}, {(3,3)}], [{(1,1)},{(3,3), (2,2)}],[{(1,1),(3,3)},{(2,2)}]], where each sublists represents a partition and includes k crossing free sets. In this example, k = 3, so each sublists contains 3 sets
+matrixGenerator = GenerateMatrix(CFPartitions)
+matrix = matrixGenerator.getMatrix()
+for row in matrix:
+    print(row)

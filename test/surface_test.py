@@ -98,5 +98,19 @@ class TestSurface(unittest.TestCase):
         surface2 = Surface(points2)
         self.assertTrue(surface1.is_intersecting(surface2))
 
+    def test_polygon_touching_at_edge(self):
+        points1 = np.array([[0, 0], [2, 0], [1, 2]])
+        points2 = np.array([[2, 0], [4, 0], [3, 2]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        self.assertTrue(surface1.is_intersecting(surface2))
+
+    def test_polygon_touching_at_vertex(self):
+        points1 = np.array([[0, 0], [2, 0], [1, 2]])
+        points2 = np.array([[2, 0], [3, -1], [4, 1]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        self.assertTrue(surface1.is_intersecting(surface2))
+
 if __name__ == '__main__':
     unittest.main()

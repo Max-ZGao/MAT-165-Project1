@@ -63,7 +63,10 @@ class PartitionGenerator:
                     np_partition = [np.array(subset) for subset in current_partition]
                     # Only add if it's not a duplicate
                     if not self._is_duplicate_partition(np_partition):
-                        self.all_partitions.append(np_partition)
+                        cfp = CrossingFreePartition(np_partition)
+                        
+                        if cfp.is_valid:
+                            self.all_partitions.append(current_partition)
                 return
 
             # Take the next object to place (like picking up the next card)

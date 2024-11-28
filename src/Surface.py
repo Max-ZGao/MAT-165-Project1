@@ -25,6 +25,33 @@ class Surface:
                     return True
         return False
 
+    def get_intersection(self, surface):
+        if not self.is_intersecting(surface):
+            return []
+
+        if surface.num_points == 1:
+            return [surface.points[0]]
+        if self.num_points == 1:
+            return [self.points[0]]
+        
+        x1, y1 = self.points[0][0], self.points[0][1]
+        x2, y2 = self.points[1][0], self.points[1][1]
+        x3, y3 = surface.points[0][0], surface.points[0][1]
+        x4, y4 = surface.points[1][0], surface.points[1][1]
+    
+        # Calculate the determinants
+        det = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        
+        # If det is zero, the lines are parallel
+        if det == 0:
+            return None
+    
+        # Calculate intersection point
+        px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / det
+        py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / det
+    
+        return np.array([[px, py]])
+
 
 #helper function 
 def orientation(p, q, r):

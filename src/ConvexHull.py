@@ -11,36 +11,80 @@ class ConvexHull:
 
         _, self.dimension = points.shape
 
-        # TO DO
-        
         self.surfaces = []
         self.points = points
+
+        if len(points) < self.dimension:
+            self.surfaces = [Surface(points)]
+
+        joint_surfaces = []
+        for x in range(len(points)):
+            for y in range(x):
+                joint_surfaces.append(Surface(np.array([points[x], points[y]])))
+
+        for surface1 in joint_surfaces:
+
+            intersect = False
+            
+            for surface2 in joint_surfaces:
+                
+                share_point = False
+                for p1 in surface1.points:
+                    for p2 in surface2.points:
+                        if np.array_equal(p1, p2):
+                            share_point = True
+
+                if share_point == True:
+                    continue
+
+                if surface1.is_intersecting(surface2):
+                    intersect = True
+                    break
+            
+            if intersect == False:
+                self.surfaces.append(surface1)
+                
         return
 
 
     # checks if a point is contained in the convex hull
     def contains_point(self, point):
 
-        assert(self.dimension == point.dimension, "ConvexHull and Point needs to be the same dimension")
+        assert self.dimension == len(point)
 
-        # TO DO
-        
-        return False
-    
-    
-    def is_intersecting(self, convexhull):
-        
-        for point in convexhull.points:
-            if self.contains_point(point):
-                return True
 
-        for point in self.points:
-            if convexhull.contains_point(point):
-                return True
+        max_loc = 1e10
+        random_point = np.random.uniform(-max_loc, max_loc, size=(self.dimension))
+        line = Surface(np.array([point, random_point]))
+        
+        count = 0
+        for s in self.surfaces:
+            if s.is_intersecting(line):
+                count += 1
+        return (count%2)==1
+        
+
+    def get_intersection(self, convexhull):
+
+        points = []
+        if len(self.points) > self.dimension:
+            for p in convexhull.points:
+                if self.contains_point(p):
+                    points.append(p)
+
+        if len(convexhull.points) > convexhull.dimension:
+            for p in self.points:
+                if convexhull.contains_point(p):
+                    points.append(p)
 
         for surface1 in convexhull.surfaces:
             for surface2 in self.surfaces:
-                if surface1.is_intersecting(surface2):
-                    return True
+                intersection = surface1.get_intersection(surface2)
+                for p in intersection:
+                    points.append(p)
 
-        return False
+        if len(points) == 0:
+            return None
+            
+        return ConvexHull(np.array(points))
+        

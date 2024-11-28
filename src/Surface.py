@@ -12,7 +12,7 @@ class Surface:
         #assert(b <= 2, "Only dimension 2 is implemented currently")
         
         self.num_points = a
-        self.dimension = b
+        self.dimention = b
         self.points = points
 
 

@@ -1,11 +1,12 @@
 # We need CrossingFreePartition to check if our partitions are valid
 # (if their convex hulls don't intersect)
 from CrossingFreePartition import CrossingFreePartition
+from RaddonPartition import RaddonPartition
 # numpy helps us work with arrays and mathematical operations
 import numpy as np
 
 class PartitionGenerator:
-    def __init__(self, objects, k):
+    def __init__(self, objects, k, type = "crossing-free"):
         """
         This is where we set up our partition generator.
         Think of it like setting up a card dealer before dealing cards.
@@ -15,6 +16,9 @@ class PartitionGenerator:
         k: This tells us exactly how many groups we need to make
            (like dealing cards to exactly k players)
         """
+
+        self.type = type
+        
         # Store the objects (points) we'll be partitioning
         self.objects = objects
         # Store how many groups we need to make
@@ -63,7 +67,11 @@ class PartitionGenerator:
                     np_partition = [np.array(subset) for subset in current_partition]
                     # Only add if it's not a duplicate
                     if not self._is_duplicate_partition(np_partition):
-                        cfp = CrossingFreePartition(np_partition)
+                        cfp = None
+                        if self.type == "crossing-free":
+                            cfp = CrossingFreePartition(np_partition)
+                        else:
+                            cfp = RaddonPartition(np_partition)
                         
                         if cfp.is_valid:
                             self.all_partitions.append(current_partition)

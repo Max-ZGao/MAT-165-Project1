@@ -11,8 +11,6 @@ class CrossingFreePartition:
         self.convexhulls = []
         self.partition = partition
 
-        intersection = None
-
         for arr in partition:
             
             for point in arr:
@@ -24,7 +22,7 @@ class CrossingFreePartition:
             new_convexhull = ConvexHull(np.array(arr))
 
             for hull in self.convexhulls:
-                if hull.get_intersection(new_convexhull) == None:
+                if hull.get_intersection(new_convexhull) != None:
                     return 
 
             self.convexhulls.append(new_convexhull)

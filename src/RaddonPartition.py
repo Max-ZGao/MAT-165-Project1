@@ -1,7 +1,7 @@
 from ConvexHull import ConvexHull
 import numpy as np
 
-class CrossingFreePartition:
+class RaddonPartition:
 
     # partition is an array of np.array of points of dimension n
     def __init__(self, partition):
@@ -10,6 +10,8 @@ class CrossingFreePartition:
         self.is_valid = False # if this is a valid partition
         self.convexhulls = []
         self.partition = partition
+
+        intersection = None
 
         for arr in partition:
             
@@ -21,9 +23,12 @@ class CrossingFreePartition:
             
             new_convexhull = ConvexHull(np.array(arr))
 
-            for hull in self.convexhulls:
-                if hull.get_intersection(new_convexhull) != None:
-                    return 
+            if intersection == None:
+                intersection = new_convexhull
+            else:
+                intersection = intersection.get_intersection(new_convexhull)
+                if intersection == None:
+                    return
 
             self.convexhulls.append(new_convexhull)
         

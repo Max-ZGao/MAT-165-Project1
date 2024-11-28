@@ -23,12 +23,9 @@ class CrossingFreePartition:
             
             new_convexhull = ConvexHull(np.array(arr))
 
-            if intersection == None:
-                intersection = new_convexhull
-            else:
-                intersection = intersection.get_intersection(new_convexhull)
-                if intersection == None:
-                    return
+            for hull in self.convexhulls:
+                if hull.get_intersection(new_convexhull) == None:
+                    return 
 
             self.convexhulls.append(new_convexhull)
         
@@ -39,4 +36,3 @@ class CrossingFreePartition:
     def is_equal(self, partition):
         if len(partition.convexhulls) != len(self.convexhulls):
             return False
-

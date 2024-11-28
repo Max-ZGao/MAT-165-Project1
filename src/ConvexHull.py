@@ -44,4 +44,3 @@ class ConvexHull:
                     return True
 
         return False
-        

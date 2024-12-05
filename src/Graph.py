@@ -54,6 +54,8 @@ class GenerateMatrix:
         # check if moving one element can make the unmatched sets match
         s1a, s1b = unmatched1
         s2a, s2b = unmatched2
+        s2a.sort()
+        s2b.sort()
         
         # assumes the order of unmatched1 and unmatched2 is the same
         for point in s1a:
@@ -61,13 +63,19 @@ class GenerateMatrix:
             s1aCopy.remove(point)
             s1bCopy = s1b[:]
             s1bCopy.append(point)
-            if s1aCopy == s2a and s1bCopy == s2b: return True
+            s1aCopy.sort()
+            s1bCopy.sort()
+            if (s1aCopy == s2a and s1bCopy == s2b) or (s1aCopy == s2b and s1bCopy == s2a): 
+                return True
         for point in s1b:
             s1aCopy = s1a[:]
             s1aCopy.append(point)
             s1bCopy = s1b[:]
             s1bCopy.remove(point)
-            if s1bCopy == s2b and s1aCopy == s2a: return True
+            s1aCopy.sort()
+            s1bCopy.sort()
+            if (s1bCopy == s2b and s1aCopy == s2a) and (s1aCopy == s2a and s1bCopy == s2b): 
+                return True
         
         return False
 

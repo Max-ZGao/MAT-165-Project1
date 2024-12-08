@@ -1,5 +1,4 @@
 import numpy as np
-
 class Surface:
 
 
@@ -44,7 +43,12 @@ class Surface:
         
         # If det is zero, the lines are parallel
         if det == 0:
-            return None
+            s1 = Surface(self.points[:1])
+            s2 = Surface(self.points[1:2])
+            s3 = Surface(surface.points[:1])
+            s4 = Surface(surface.points[1:2])
+
+            return s3.get_intersection(self) + s4.get_intersection(self) + s1.get_intersection(surface) + s2.get_intersection(surface)
     
         # Calculate intersection point
         px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / det

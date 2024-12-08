@@ -5,7 +5,7 @@ class GenerateMatrix:
     def getMatrix(self):
         partitions = self.partitions
         n = len(partitions)
-        matrix = [[1 if i == j else 0 for j in range(n)] for i in range(n)] # identity matrix
+        matrix = [[0 for j in range(n)] for i in range(n)] # identity matrix
         for i in range(n):
             for j in range(i+1, n):
                 if self.distance_is_one(partitions[i], partitions[j]):

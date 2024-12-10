@@ -80,9 +80,9 @@ class ConvexHull:
         for surface1 in convexhull.surfaces:
             for surface2 in self.surfaces:
                 intersection = surface1.get_intersection(surface2)
-                if intersection != None:
-                    for p in intersection:
-                        points.append(p)
+                for p in intersection:
+                    points.append(p)
+                    
 
         if len(points) == 0:
             return None

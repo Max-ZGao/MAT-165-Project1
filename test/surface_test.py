@@ -112,5 +112,56 @@ class TestSurface(unittest.TestCase):
         surface2 = Surface(points2)
         self.assertTrue(surface1.is_intersecting(surface2))
 
+    def test_3d_no_intersection_parallel_planes(self):
+        points1 = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        points2 = np.array([[0, 0, 1], [1, 0, 1], [0, 1, 1]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        self.assertEqual(surface1.is_intersecting_3d(surface2), False)
+
+    def test_3d_intersection_planes(self):
+        points1 = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        points2 = np.array([[0, 0, 0], [1, 0, 1], [0, 1, 1]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        intersection = surface1.is_intersecting_3d(surface2)
+        self.assertTrue(intersection == True)  # Should intersect in a line or points
+
+    def test_3d_intersection_polygon_and_line(self):
+        polygon_points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        line_points = np.array([[0.5, 0.5, -1], [0.5, 0.5, 1]])
+        polygon = Surface(polygon_points)
+        line = Surface(line_points)
+        intersection = polygon.is_intersecting_3d(line)
+        self.assertTrue(intersection == True)  # Should intersect at a point
+
+    def test_3d_intersection_polygon_and_point(self):
+        polygon_points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        point = np.array([[0.5, 0.5, 0]])
+        polygon = Surface(polygon_points)
+        point_surface = Surface(point)
+        intersection = polygon.is_intersecting_3d(point_surface)
+        self.assertTrue(intersection == True)  # Intersection is the point itself
+
+    def test_3d_intersection_skew_planes(self):
+        points1 = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        points2 = np.array([[0, 0, 1], [1, 0, 1], [0, 1, -1]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        intersection = surface1.is_intersecting_3d(surface2)
+        self.assertTrue(intersection == True)  # Skew planes should intersect in a line
+
+    def test_3d_intersection_overlapping_polygon(self):
+        points1 = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        points2 = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])
+        surface1 = Surface(points1)
+        surface2 = Surface(points2)
+        intersection = surface1.is_intersecting_3d(surface2)
+        self.assertTrue(intersection == True)  # Overlapping surfaces should intersect
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main()

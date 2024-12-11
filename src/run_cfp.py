@@ -3,6 +3,8 @@ from CrossingFreePartition import CrossingFreePartition
 from ConvexHull import ConvexHull
 from Graph import GenerateMatrix
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 points = [# enter points here
@@ -39,3 +41,19 @@ matrixGenerator = GenerateMatrix(partitions)
 matrix = matrixGenerator.getMatrix()
 for row in matrix:
     print(row)
+
+print(matrix)
+# Define the adjacency matrix
+adj_matrix = np.array(matrix)
+
+# Create the graph
+G = nx.from_numpy_matrix(adj_matrix)
+
+# Draw the graph
+plt.figure(figsize=(8, 6))
+pos = nx.spring_layout(G, seed=42)  # Use spring layout for better visualization
+nx.draw_networkx_nodes(G, pos, node_color='skyblue', node_size=500)
+nx.draw_networkx_edges(G, pos)
+nx.draw_networkx_labels(G, pos, font_size=10, font_color='black')
+plt.title("Grafo generado a partir de la matriz de adyacencia")
+plt.show()

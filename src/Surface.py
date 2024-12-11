@@ -171,31 +171,55 @@ class Surface:
     # check if a line segment intersects a triangle
     def _segment_triangle_intersect(self, p1, p2, triangle_points):
         normal = self._compute_normal(*triangle_points)
-        if normal is None:
+        if normal is None:  # Collinear case
+            # Check if any triangle point lies on the segment
+            for point in triangle_points:
+                if self._point_on_line_segment(point, p1, p2):
+                    return True
+            # Check if any segment endpoint lies on the triangle segments
+            for i in range(3):
+                if self._point_on_line_segment(p1, triangle_points[i], 
+                                            triangle_points[(i+1)%3]):
+                    return True
+                if self._point_on_line_segment(p2, triangle_points[i], 
+                                            triangle_points[(i+1)%3]):
+                    return True
             return False
 
-        # check if endpoint 
-        if self._point_in_triangle(p1, triangle_points) or self._point_in_triangle(p2, triangle_points):
+        # Rest of your existing code...
+        if self._point_in_triangle(p1, triangle_points) or \
+        self._point_in_triangle(p2, triangle_points):
             return True
 
-        # check if line is parallel to triangle
         direction = p2 - p1
         ndotu = np.dot(normal, direction)
 
-        # if parallele
-        if abs(ndotu) < 1e-10: 
+        if abs(ndotu) < 1e-10:
             return False
 
-        # intersection point 
         w = p1 - triangle_points[0]
         si = -np.dot(normal, w) / ndotu
         
-        # Check if intersection is within segment bounds
         if si < -1e-10 or si > 1 + 1e-10:
             return False
 
         intersection = p1 + si * direction
         return self._point_in_triangle(intersection, triangle_points)
+
+    def _point_on_line_segment(self, point, segment_start, segment_end):
+        # if a point lies on a line segment
+        v1 = point - segment_start
+        v2 = segment_end - segment_start
+        
+        # parallel
+        cross = np.cross(v1, v2)
+        if np.linalg.norm(cross) > 1e-10: 
+            return False
+            
+        # check if point is within segment bounds
+        dot = np.dot(v1, v2)
+        sqLen = np.dot(v2, v2)
+        return 0 <= dot <= sqLen
 
     def _point_intersection_3d(self, other):
         point = self.points[0] if self.num_points == 1 else other.points[0]

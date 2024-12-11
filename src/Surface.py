@@ -80,8 +80,17 @@ class Surface:
         return False
 
     def get_intersection(self, surface):
+        # because in crossingfreepartition.py we only care about if there is an intersection or not. It is not necessary to return the intersection points. 
+        # so for 3d, we just return a random point if there is an intersection
+        if surface.dimention == 3 or self.dimention == 3:
+            if self.is_intersecting_3d(surface):
+                return [[0, 0, 0]]
+ 
+        
         if not self.is_intersecting(surface):
             return []
+
+
 
         if surface.num_points == 1:
             return [surface.points[0]]
@@ -193,7 +202,7 @@ class Surface:
         surface = other if self.num_points == 1 else self
 
         if surface.num_points == 1:
-            return np.allclose(pchoint, surface.points[0], atol=1e-10)
+            return np.allclose(point, surface.points[0], atol=1e-10)
         elif surface.num_points == 2:
             # if point lies on line segment
             p1, p2 = surface.points[0], surface.points[1]

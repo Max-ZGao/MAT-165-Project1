@@ -18,9 +18,15 @@ class ConvexHull:
             self.surfaces = [Surface(points)]
 
         joint_surfaces = []
-        for x in range(len(points)):
-            for y in range(x):
-                joint_surfaces.append(Surface(np.array([points[x], points[y]])))
+        if self.dimension == 2:
+            for x in range(len(points)):
+                for y in range(x):
+                    joint_surfaces.append(Surface(np.array([points[x], points[y]])))
+        elif self.dimension == 3:
+            for x in range(len(points)):
+                for y in range(x):
+                    for z in range(y):
+                        joint_surfaces.append(Surface(np.array([points[x], points[y], points[z]])))
 
         for surface1 in joint_surfaces:
 

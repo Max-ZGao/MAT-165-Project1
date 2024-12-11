@@ -6,53 +6,61 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
-points = [# enter points here
-    [0,8],
-    [1,8],
-    [6,-4],
-    [7,-3],
-    [-9,-2]
+# You can input either 2D or 3D points here
+points = [
+    # For 2D points, use format [x, y]
+   
+    
+    # For 3D points, use format [x, y, z]
+    [0, 0, 0],
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 1, 1]
 ]
 
+# Number of partitions
 k = 3
 
-
-
-
+# Create partition generator
 generator = PartitionGenerator(points, k)
 
+# Store valid partitions
 partitions = []
 
-print("Valid Partitions")
+# Get all valid partitions
+print("Valid Partitions:")
 while True:
     part = generator.next()
-    
     if part == None:
         break
-  
     partitions.append(part)
     print(part)
 
-print()
-print("Matrix")
-# output of the program. CFPartitions should be a list of lists of sets, such as [[{(1,1), (2,2)}, {(3,3)}], [{(1,1)},{(3,3), (2,2)}],[{(1,1),(3,3)},{(2,2)}]], where each sublists represents a partition and includes k crossing free sets. In this example, k = 3, so each sublists contains 3 sets
+# Generate adjacency matrix
+print("\nAdjacency Matrix:")
 matrixGenerator = GenerateMatrix(partitions)
 matrix = matrixGenerator.getMatrix()
 for row in matrix:
     print(row)
-    
-# Define the adjacency matrix
-adj_matrix = np.array(matrix)
 
-# Create the graph
-G = nx.from_numpy_matrix(adj_matrix)
+# Create graph visualization
+G = nx.Graph()
+
+# Add nodes
+for i in range(len(matrix)):
+    G.add_node(i)
+
+# Add edges
+for i in range(len(matrix)):
+    for j in range(i+1, len(matrix)):
+        if matrix[i][j] == 1:
+            G.add_edge(i, j)
 
 # Draw the graph
 plt.figure(figsize=(8, 6))
-pos = nx.spring_layout(G, seed=42)  # Use spring layout for better visualization
-nx.draw_networkx_nodes(G, pos, node_color='skyblue', node_size=500)
-nx.draw_networkx_edges(G, pos)
-nx.draw_networkx_labels(G, pos, font_size=10, font_color='black')
-plt.title("Grafo generado a partir de la matriz de adyacencia")
+pos = nx.spring_layout(G)
+nx.draw(G, pos, with_labels=True, node_color='skyblue', 
+        node_size=500, font_size=16, font_weight='bold')
+plt.title("Partition Adjacency Graph")
 plt.show()

@@ -41,8 +41,7 @@ matrixGenerator = GenerateMatrix(partitions)
 matrix = matrixGenerator.getMatrix()
 for row in matrix:
     print(row)
-
-print(matrix)
+    
 # Define the adjacency matrix
 adj_matrix = np.array(matrix)
 
